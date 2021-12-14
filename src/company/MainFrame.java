@@ -22,23 +22,26 @@ import javax.swing.JTextField;
 // Главный класс приложения, он же класс фрейма
 public class MainFrame extends JFrame {
     // Размеры окна приложения в виде констант
-    private static final int WIDTH = 400;
-    private static final int HEIGHT = 320;
+    private static final int WIDTH = 550;
+    private static final int HEIGHT = 400;
     // Текстовые поля для считывания значений переменных,
 // как компоненты, совместно используемые в различных методах
     private JTextField textFieldX;
     private JTextField textFieldY;
-
     private JTextField textFieldZ;
     // Текстовое поле для отображения результата,
 // как компонент, совместно используемый в различных методах
     private JTextField textFieldResult;
-    private Double result;
+    private JTextField textFieldMemory;
     // Группа радио-кнопок для обеспечения уникальности выделения в группе
     private ButtonGroup radioButtons = new ButtonGroup();
+
     // Контейнер для отображения радио-кнопок
     private Box hboxFormulaType = Box.createHorizontalBox();
     private int formulaId = 1;
+
+    private Double result;
+    private Double memory = new Double(0);
     // Формула No1 для рассчѐта
     public Double calculate1(Double x, Double y,Double z) {
         return (Math.sin(Math.PI*y*y)+Math.log(y*y))/(Math.sin(Math.PI*z*z)+Math.sin(x)+x*x+Math.log(z*z)+Math.pow(Math.E,Math.cos(z*x)));
@@ -126,6 +129,18 @@ public class MainFrame extends JFrame {
         hboxResult.add(Box.createHorizontalGlue());
         hboxResult.setBorder(BorderFactory.createLineBorder(Color.BLUE));
 // Создать область для кнопок
+        JLabel labelForMemory = new JLabel("Память:");
+        textFieldMemory = new JTextField("0",15);
+        textFieldMemory.setMaximumSize(
+                textFieldMemory.getPreferredSize());
+
+        Box hboxMemory = Box.createHorizontalBox();
+        hboxResult.add(Box.createHorizontalGlue());
+        hboxResult.add(labelForMemory);
+        hboxResult.add(Box.createHorizontalStrut(10));
+        hboxResult.add(textFieldMemory);
+        hboxResult.add(Box.createHorizontalGlue());
+        hboxResult.setBorder(BorderFactory.createLineBorder(Color.BLACK));
 
         JButton buttonCalc = new JButton("Вычислить");
         buttonCalc.addActionListener(new ActionListener() {
@@ -149,6 +164,23 @@ public class MainFrame extends JFrame {
                 }
             }
         });
+
+        JButton calculate = new JButton("M+");
+        calculate.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent ev) {
+                try {
+                    Double result = Double.parseDouble(textFieldResult.getText());
+                    memory+=result;
+                    textFieldMemory.setText(memory.toString());
+
+                } catch (NumberFormatException ex) {
+                    JOptionPane.showMessageDialog(MainFrame.this,
+                            "Ошибка в формате записи числа с плавающей точкой", "Ошибочный формат числа",
+                            JOptionPane.WARNING_MESSAGE);
+                }
+            }
+        });
+
         JButton buttonReset = new JButton("Очистить");
         buttonReset.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent ev) {
@@ -158,11 +190,23 @@ public class MainFrame extends JFrame {
                 textFieldResult.setText("0");
             }
         });
+//создание кнопки "MC"
+        JButton buttonMC = new JButton("MC");
+        buttonMC.addActionListener(new ActionListener(){
+            public void actionPerformed(ActionEvent ev){
+                memory = (double) 0;
+                textFieldMemory.setText("0");
+            }
+        });
         Box hboxButtons = Box.createHorizontalBox();
         hboxButtons.add(Box.createHorizontalGlue());
         hboxButtons.add(buttonCalc);
-        hboxButtons.add(Box.createHorizontalStrut(30));
+        hboxButtons.add(Box.createHorizontalStrut(10));
+        hboxButtons.add(calculate);
+        hboxButtons.add(Box.createHorizontalStrut(10));
         hboxButtons.add(buttonReset);
+        hboxButtons.add(Box.createHorizontalStrut(10));
+        hboxButtons.add(buttonMC);
         hboxButtons.add(Box.createHorizontalGlue());
         hboxButtons.setBorder(
                 BorderFactory.createLineBorder(Color.GREEN));
@@ -172,6 +216,7 @@ public class MainFrame extends JFrame {
         contentBox.add(hboxFormulaType);
         contentBox.add(hboxVariables);
         contentBox.add(hboxResult);
+        contentBox.add(hboxMemory);
         contentBox.add(hboxButtons);
         contentBox.add(Box.createVerticalGlue());
         getContentPane().add(contentBox, BorderLayout.CENTER);
