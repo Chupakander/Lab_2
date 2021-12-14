@@ -48,13 +48,11 @@ public class MainFrame extends JFrame {
     private void addRadioButton(String buttonName, final int formulaId) {
         JRadioButton button = new JRadioButton(buttonName);
 
-        Курс «Прикладное программирование». Лабораторная работа No2
-© Стрикелев Д.А. 36
 
         button.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent ev) {
                 MainFrame.this.formulaId = formulaId;
-                imagePane.updateUI();
+
             }
         });
         radioButtons.add(button);
@@ -116,8 +114,6 @@ public class MainFrame extends JFrame {
             public void actionPerformed(ActionEvent ev) {
                 try {
 
-                    Курс «Прикладное программирование». Лабораторная работа No2
-© Стрикелев Д.А. 37
                     Double x = Double.parseDouble(textFieldX.getText());
                     Double y = Double.parseDouble(textFieldY.getText());
                     Double result;
