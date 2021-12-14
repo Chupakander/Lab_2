@@ -28,17 +28,20 @@ public class MainFrame extends JFrame {
 // как компоненты, совместно используемые в различных методах
     private JTextField textFieldX;
     private JTextField textFieldY;
+
+    private JTextField textFieldZ;
     // Текстовое поле для отображения результата,
 // как компонент, совместно используемый в различных методах
     private JTextField textFieldResult;
+    private Double result;
     // Группа радио-кнопок для обеспечения уникальности выделения в группе
     private ButtonGroup radioButtons = new ButtonGroup();
     // Контейнер для отображения радио-кнопок
     private Box hboxFormulaType = Box.createHorizontalBox();
     private int formulaId = 1;
     // Формула No1 для рассчѐта
-    public Double calculate1(Double x, Double y) {
-        return x*x + y*y;
+    public Double calculate1(Double x, Double y,Double z) {
+        return (Math.sin(Math.PI*y*y)+Math.log(y*y))/(Math.sin(Math.PI*z*z)+Math.sin(x)+x*x+Math.log(z*z)+Math.pow(Math.E,Math.cos(z*x)));
     }
     // Формула No2 для рассчѐта
     public Double calculate2(Double x, Double y) {
@@ -80,25 +83,39 @@ public class MainFrame extends JFrame {
         JLabel labelForX = new JLabel("X:");
         textFieldX = new JTextField("0", 10);
         textFieldX.setMaximumSize(textFieldX.getPreferredSize());
+
         JLabel labelForY = new JLabel("Y:");
         textFieldY = new JTextField("0", 10);
         textFieldY.setMaximumSize(textFieldY.getPreferredSize());
+
+        JLabel labelForZ = new JLabel("Z:");
+        textFieldZ = new JTextField("0", 10);
+        textFieldZ.setMaximumSize(textFieldZ.getPreferredSize());
+
         Box hboxVariables = Box.createHorizontalBox();
         hboxVariables.setBorder(
                 BorderFactory.createLineBorder(Color.RED));
         hboxVariables.add(Box.createHorizontalGlue());
+
         hboxVariables.add(labelForX);
         hboxVariables.add(Box.createHorizontalStrut(10));
         hboxVariables.add(textFieldX);
-        hboxVariables.add(Box.createHorizontalStrut(100));
+
         hboxVariables.add(labelForY);
         hboxVariables.add(Box.createHorizontalStrut(10));
         hboxVariables.add(textFieldY);
+
+        hboxVariables.add(labelForZ);
+        hboxVariables.add(Box.createHorizontalStrut(10));//распорка
+        hboxVariables.add(textFieldZ);
+
+
+// Создать область для вывода результата
         hboxVariables.add(Box.createHorizontalGlue());
 // Создать область для вывода результата
         JLabel labelForResult = new JLabel("Результат:");
 //labelResult = new JLabel("0");
-        textFieldResult = new JTextField("0", 10);
+        textFieldResult = new JTextField("0", 15);
         textFieldResult.setMaximumSize(
                 textFieldResult.getPreferredSize());
         Box hboxResult = Box.createHorizontalBox();
@@ -109,19 +126,22 @@ public class MainFrame extends JFrame {
         hboxResult.add(Box.createHorizontalGlue());
         hboxResult.setBorder(BorderFactory.createLineBorder(Color.BLUE));
 // Создать область для кнопок
+
         JButton buttonCalc = new JButton("Вычислить");
         buttonCalc.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent ev) {
                 try {
-
                     Double x = Double.parseDouble(textFieldX.getText());
                     Double y = Double.parseDouble(textFieldY.getText());
-                    Double result;
-                    if (formulaId==1)
-                        result = calculate1(x, y);
-                    else
+                    Double z = Double.parseDouble(textFieldZ.getText());
+                    if (formulaId == 1) {
+                        result = calculate1(x, y, z);
+                    }
+                    else {
                         result = calculate2(x, y);
+                    }
                     textFieldResult.setText(result.toString());
+
                 } catch (NumberFormatException ex) {
                     JOptionPane.showMessageDialog(MainFrame.this,
                             "Ошибка в формате записи числа с плавающей точкой", "Ошибочный формат числа",
@@ -129,11 +149,12 @@ public class MainFrame extends JFrame {
                 }
             }
         });
-        JButton buttonReset = new JButton("Очистить поля");
+        JButton buttonReset = new JButton("Очистить");
         buttonReset.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent ev) {
                 textFieldX.setText("0");
                 textFieldY.setText("0");
+                textFieldZ.setText("0");
                 textFieldResult.setText("0");
             }
         });
