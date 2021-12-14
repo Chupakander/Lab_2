@@ -198,6 +198,7 @@ public class MainFrame extends JFrame {
                 textFieldMemory.setText("0");
             }
         });
+
         Box hboxButtons = Box.createHorizontalBox();
         hboxButtons.add(Box.createHorizontalGlue());
         hboxButtons.add(buttonCalc);
